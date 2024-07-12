@@ -1,4 +1,4 @@
-# CULLALGO
+# CULLALGO1.0
 'CULLALGO is a script that uses multiple parameters to 'cull' a large dataset of .fasta protein sequences to a manageable amount with desired traits in a .fasta output. All measurements are based on up to date existing literature.'
 
 The determinant parameters in CULLALGO1.0 are as follows:
