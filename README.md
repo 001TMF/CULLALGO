@@ -14,12 +14,15 @@ The determinant parameters in CULLALGO1.0 are as follows:
 
 'CULLALGO uses NETSOLP and TemStaPro for determining Sollubility and Thermostability thresholds, respectively. Both are required to install and set up in order to run the script.'
 
-'NETSOLP https://academic.oup.com/bioinformatics/article/38/4/941/6444984'
+'NETSOLP https://github.com/tvinet/NetSolP-1.0'
 
 'TemStaPro https://github.com/ievapudz/TemStaPro'
 
 # Set-up
 
-1. Install and correctly set-up NETSOLP and TemStaPro. It is advised to first test both programs independently to make sure they work. As of CULLALGO1.0, NETSOLP Sollubility
-measurements CAN be run natively in the script after set-up. However, TemStaPro MUST BE FIRST RUN SEPERATELY, and the output file correctly placed in the desired directory. TemStaPro cannot be run natively in the script.
-2. 
+1. Set up a seperate conda environment with all required python imports from the requirements.txt file. Make sure your python version is AT LEAST 3.11. If requirements.txt poses problems, run script manually and /pip install/ whatever is needed. (WARNING: A seperate environment, where python==3.7 needs to exist to run TemStaPro. This is mentioned in its installation guidelines.)
+2. Install and correctly set-up NETSOLP and TemStaPro. It is advised to first test both programs independently to make sure they work. As of CULLALGO1.0, NETSOLP Sollubility measurements CAN be run natively in the script after set-up. However, TemStaPro MUST BE FIRST RUN SEPERATELY, and the output file correctly placed in the desired directory. TemStaPro cannot be run natively in the script.
+3. All directories must be changed manually to match desired output. For error handling, all files used for CULLALGO1.0 should be in the same directory.
+![image](https://github.com/user-attachments/assets/be323027-2965-4be6-a8aa-5de9d1994005)
+![image](https://github.com/user-attachments/assets/2445f9c4-1cf6-4af9-bda1-12b36c36ac22)
+These are the lines that need to be changed before running the script.
