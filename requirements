@@ -1,0 +1,11 @@
+pandas
+Bio
+Bio.SeqUtils.IsoelectricPoint
+Bio.Seq
+Bio.SeqRecord
+numpy
+os
+subprocess
+collections
+math
+re
