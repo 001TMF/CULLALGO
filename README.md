@@ -26,4 +26,7 @@ The determinant parameters in CULLALGO1.0 are as follows:
 ![image](https://github.com/user-attachments/assets/be323027-2965-4be6-a8aa-5de9d1994005)
 ![image](https://github.com/user-attachments/assets/2445f9c4-1cf6-4af9-bda1-12b36c36ac22)
 These are the lines that need to be changed before running the script, in the same format.
-4. After running the script, the selected_sequences.fasta file is created in the output_path directory. 
+4. After running the script, the selected_sequences.fasta file is created in the output_path directory.
+
+# Tweaks for desired results
+There are multiple lines in the code that can be tweaked for individual variance. As of CULLALGO1.0, all of them are made clear via comments in the code.
