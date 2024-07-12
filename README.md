@@ -25,4 +25,5 @@ The determinant parameters in CULLALGO1.0 are as follows:
 3. All directories must be changed manually to match desired output. For error handling, all files used for CULLALGO1.0 should be in the same directory.
 ![image](https://github.com/user-attachments/assets/be323027-2965-4be6-a8aa-5de9d1994005)
 ![image](https://github.com/user-attachments/assets/2445f9c4-1cf6-4af9-bda1-12b36c36ac22)
-These are the lines that need to be changed before running the script.
+These are the lines that need to be changed before running the script, in the same format.
+4. After running the script, the selected_sequences.fasta file is created in the output_path directory. 
