@@ -1,5 +1,5 @@
 pandas
-Bio
+biopython
 Bio.SeqUtils.IsoelectricPoint
 Bio.Seq
 Bio.SeqRecord
@@ -8,4 +8,3 @@ os
 subprocess
 collections
 math
-re
