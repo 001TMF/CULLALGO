@@ -1,5 +1,5 @@
 # CULLALGO
-'CULLALGO is a script that uses multiple parameters to 'cull' a large dataset of .fasta protein sequences to a manageable amount with desired traits in a .fasta output. All measurements are based on existing literature.'
+'CULLALGO is a script that uses multiple parameters to 'cull' a large dataset of .fasta protein sequences to a manageable amount with desired traits in a .fasta output. All measurements are based on up to date existing literature.'
 
 The determinant parameters in CULLALGO1.0 are as follows:
 1. Molecular weight
@@ -21,6 +21,5 @@ The determinant parameters in CULLALGO1.0 are as follows:
 # Set-up
 
 1. Install and correctly set-up NETSOLP and TemStaPro. It is advised to first test both programs independently to make sure they work. As of CULLALGO1.0, NETSOLP Sollubility
-measurements CAN be run natively in the script after set-up. However, TemStaPro MUST BE FIRST RUN SEPERATELY, and the output file correctly placed in the desired directory. It
-cannot be run natively in the script.
+measurements CAN be run natively in the script after set-up. However, TemStaPro MUST BE FIRST RUN SEPERATELY, and the output file correctly placed in the desired directory. TemStaPro cannot be run natively in the script.
 2. 
