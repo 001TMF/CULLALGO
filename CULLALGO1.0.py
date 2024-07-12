@@ -81,8 +81,8 @@ def costing(sequence):
     return sum(costs[aa] for aa in sequence if aa in costs)
 
 # Calculates average propensity scores of amino acids in a specified 'window size' of the entire sequence.
-# Adjust window size if needed (default = 10)
-# Adjust threshold for narrower picking (default = 1.0)
+# Adjust window size if needed (default = 10)----------------------------------------------------------------------
+# Adjust threshold for narrower picking (default = 1.0)------------------------------------------------------------
 def calculate_propensity(sequence, window_size=10, threshold=1.0):
     propensities = []
     for i in range(len(sequence) - window_size + 1):
@@ -92,6 +92,7 @@ def calculate_propensity(sequence, window_size=10, threshold=1.0):
     return propensities
 
 # Iterates propensities to determine helical regions
+# Window size and threshold should match from calculate_propensity-------------------------------------------------
 def detect_alpha_helices(sequence, window_size=10, threshold=1.0):
     propensities = calculate_propensity(sequence, window_size, threshold)
     alpha_helices = []
@@ -184,6 +185,10 @@ def calculate_properties(fasta_path, solubility_path, thermo_path):
     return df
 
 # Threshold percentages for manual tweaking of starting thresholds
+# Percentile dictates the pool of sequences the script picks from. If percentile=100, it has access to all sequences.
+# I.e., the minimum is the 0th percentile.
+# If e.g., percentile=80, the minimum is the 20th percentile, so the bottom 20% is not accessible.
+# It is advised to leave this unchanged for best results (default percentile=100)---------------------------------------------------------------------
 def determine_thresholds_percentile(df, metric, percentile=100, reverse=False):
     metric_values = df[metric]
     if reverse:
@@ -195,6 +200,11 @@ def determine_thresholds_percentile(df, metric, percentile=100, reverse=False):
     return min_threshold, max_threshold
 
 # User input prompt for percentile determination on 'general' cues. I.e., how much something matters.
+# The percentiles associated with weight integers [1,2,3] are default as:
+# 1 - 0th percentile. All sequences included.
+# 2 - 50th percentile. 50% of the worst sequences culled.
+# 3 - 80th percentile. 80% of the worst sequences culled.
+# weightings[parameter] can be changed according to needs-------------------------------------------------------------------------
 def ask_user_for_weights():
     parameters = ["Molecular_Weight", "ASA", "Isoelectric_Point", "Cost", "Solubility", "Thermostability", "Num_Alpha_Helices", "Entropy", "DNA_Complexity"]
     weightings = {}
@@ -241,7 +251,7 @@ def select_sequences(df, thresholds, num_sequences):
 # Main logic to adjust thresholds to meet the required number of sequences
 def adjust_thresholds(df, user_weightings, num_sequences):
     adjusted_thresholds = user_weightings.copy()
-    increment = 1  # Adjust this value to control how aggressively the thresholds are lowered (Default = 1)
+    increment = 1  # Adjust this value to control how aggressively the thresholds are lowered (Default = 1)------------------------------------
 
     while True:
         thresholds = {
