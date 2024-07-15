@@ -63,19 +63,19 @@ conda activate temstapro_env_CPU
 ```
 
 # CULLALGO1.0
-1. Have TemStaPro .tsv file output from the TemStaPro model in chosen directory.
+1. Have TemStaPro .tsv file output from the TemStaPro model in chosen directory. 
 ```bash
 cd CULL
 ```
-3. CULLALGO environment (PYTHON == 3.11)
+2. CULLALGO environment (PYTHON == 3.11)
 ```bash
 conda activate CULLALGO
 ```
-4. Download script
+3. Download script
 ```bash
 https://raw.githubusercontent.com/gusgrazelis/CULLALGO/main/CULLALGO1.0.py
 ```
-5. Change directories in script manually
+4. Change directories in script manually
 ```python
 # Lines 288, 289, 290 (CHANGE IF RUNNING NETSOLP FROM CULLALGO1.0.py SCRIPT)
 fasta_path = '/home/s_gus/progs/D.fasta'
@@ -87,12 +87,12 @@ fasta_path = '/home/s_gus/progs/D.fasta'
 output_path = '/home/s_gus/progs/'    
 thermo_path = "/home/s_gus/progs/long_sequence_predictions.tsv"
 ```
-6. Run script
+5. Run script
 ```bash
 python CULLALGO1.0.py
 ```
 
-7. After running the script, the selected_sequences.fasta file is created in the output_path directory.
+6. After running the script, the selected_sequences.fasta file is created in the output_path directory.
 ```bash
 nano selected_sequences.fasta
 ```
