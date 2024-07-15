@@ -73,7 +73,7 @@ conda activate CULLALGO
 ```
 3. Download script
 ```bash
-https://raw.githubusercontent.com/gusgrazelis/CULLALGO/main/CULLALGO1.0.py
+wget https://raw.githubusercontent.com/gusgrazelis/CULLALGO/main/CULLALGO1.0.py
 ```
 4. Change directories in script manually
 ```python
