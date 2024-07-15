@@ -40,7 +40,30 @@ pip install -r requirements.txt
 python predict.py --FASTA_PATH ./test_fasta.fasta --OUTPUT_PATH ./test_preds.csv --MODEL_TYPE ESM12 --PREDICTION_TYPE S
 ```
 # TemStaPro Installation (https://github.com/ievapudz/TemStaPro)
+```bash
+git clone https://github.com/ievapudz/TemStaPro.git
+```
 
+```bash
+cd TemStaPro
+```
+
+```bash
+conda env create -f environment_CPU.yml
+```
+
+```bash
+conda activate temstapro_env_CPU
+```
+
+```bash
+#Example usage
+./temstapro -f ./tests/data/long_sequence.fasta -d ./ProtTrans/ \
+    -e /home/user/CULL --mean-output ./long_sequence_predictions.tsv
+```
+
+#CULLALGO1.0
+1. 
 1. Set up a seperate conda environment with all required python imports from the requirements.txt file. Make sure your python version is AT LEAST 3.11. If requirements.txt poses problems, run script manually and /pip install/ whatever is needed. (WARNING: A seperate environment, where python==3.7 needs to exist to run TemStaPro. This is mentioned in its installation guidelines.)
 2. Install and correctly set-up NETSOLP and TemStaPro. It is advised to first test both programs independently to make sure they work. As of CULLALGO1.0, NETSOLP Sollubility measurements CAN be run natively in the script after set-up. However, TemStaPro MUST BE FIRST RUN SEPERATELY, and the output file correctly placed in the desired directory. TemStaPro cannot be run natively in the script.
 3. All directories must be changed manually to match desired output. For error handling, all files used for CULLALGO1.0 should be in the same directory.
