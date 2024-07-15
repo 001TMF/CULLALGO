@@ -78,9 +78,9 @@ wget https://raw.githubusercontent.com/gusgrazelis/CULLALGO/main/CULLALGO1.0.py
 4. Change directories in script manually
 ```python
 # Lines 288, 289, 290 (CHANGE IF RUNNING NETSOLP FROM CULLALGO1.0.py SCRIPT)
-fasta_path = '/home/s_gus/progs/D.fasta'
-output_path = '/home/s_gus/progs/'
-thermo_path = '/home/s_gus/progs/long_sequence_predictions.tsv'
+fasta_path = '/home/s_gus/progs/D.fasta' #.Fasta file
+output_path = '/home/s_gus/progs/' #Output path for both SOLLUBILITY and selected_sequences.fasta files
+thermo_path = '/home/s_gus/progs/long_sequence_predictions.tsv' #TemStaPro .tsv file
 
 #Lines 309, 310, 311 (CHANGE IF -NOT- RUNNING NETSOLP FROM CULLALGO1.0.py SCRIPT)
 fasta_path = '/home/s_gus/progs/D.fasta'
