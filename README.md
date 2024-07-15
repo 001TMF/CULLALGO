@@ -80,17 +80,15 @@ fasta_path = '/home/s_gus/progs/D.fasta'
 output_path = '/home/s_gus/progs/'    
 thermo_path = "/home/s_gus/progs/long_sequence_predictions.tsv"
 ```
-
+4. Run script
 ```bash
 python CULLALGO1.0.py
 ```
 
-
-3. All directories must be changed manually to match desired output. For error handling, all files used for CULLALGO1.0 should be in the same directory.
-![image](https://github.com/user-attachments/assets/be323027-2965-4be6-a8aa-5de9d1994005)
-![image](https://github.com/user-attachments/assets/2445f9c4-1cf6-4af9-bda1-12b36c36ac22)
-These are the lines that need to be changed before running the script, in the same format.
-4. After running the script, the selected_sequences.fasta file is created in the output_path directory.
+5. After running the script, the selected_sequences.fasta file is created in the output_path directory.
+```bash
+nano selected_sequences.fasta
+```
 
 # Tweaks for desired results
 There are multiple lines in the code that can be tweaked for individual variance. As of CULLALGO1.0, all of them are made clear via comments in the code.
