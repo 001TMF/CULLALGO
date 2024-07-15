@@ -19,6 +19,10 @@ The determinant parameters in CULLALGO1.0 are as follows:
 'TemStaPro https://github.com/ievapudz/TemStaPro'
 
 # Set-up
+# NetSolP Installation from (https://github.com/tvinet/NetSolP-1.0)
+```bash
+conda create -n CULLALGO
+```
 
 1. Set up a seperate conda environment with all required python imports from the requirements.txt file. Make sure your python version is AT LEAST 3.11. If requirements.txt poses problems, run script manually and /pip install/ whatever is needed. (WARNING: A seperate environment, where python==3.7 needs to exist to run TemStaPro. This is mentioned in its installation guidelines.)
 2. Install and correctly set-up NETSOLP and TemStaPro. It is advised to first test both programs independently to make sure they work. As of CULLALGO1.0, NETSOLP Sollubility measurements CAN be run natively in the script after set-up. However, TemStaPro MUST BE FIRST RUN SEPERATELY, and the output file correctly placed in the desired directory. TemStaPro cannot be run natively in the script.
