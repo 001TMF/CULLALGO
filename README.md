@@ -63,9 +63,29 @@ conda activate temstapro_env_CPU
 ```
 
 # CULLALGO1.0
-1. 
-1. Set up a seperate conda environment with all required python imports from the requirements.txt file. Make sure your python version is AT LEAST 3.11. If requirements.txt poses problems, run script manually and /pip install/ whatever is needed. (WARNING: A seperate environment, where python==3.7 needs to exist to run TemStaPro. This is mentioned in its installation guidelines.)
-2. Install and correctly set-up NETSOLP and TemStaPro. It is advised to first test both programs independently to make sure they work. As of CULLALGO1.0, NETSOLP Sollubility measurements CAN be run natively in the script after set-up. However, TemStaPro MUST BE FIRST RUN SEPERATELY, and the output file correctly placed in the desired directory. TemStaPro cannot be run natively in the script.
+1. Have TemStaPro .tsv file output from the TemStaPro model in directory
+2. CULLALGO environment (PYTHON == 3.11)
+```bash
+conda activate CULLALGO
+```
+3. Change directories in script manually
+```python
+# Lines 288, 289, 290
+fasta_path = '/home/s_gus/progs/D.fasta'
+output_path = '/home/s_gus/progs/'
+thermo_path = '/home/s_gus/progs/long_sequence_predictions.tsv'
+
+#Lines 309, 310, 311
+fasta_path = '/home/s_gus/progs/D.fasta'
+output_path = '/home/s_gus/progs/'    
+thermo_path = "/home/s_gus/progs/long_sequence_predictions.tsv"
+```
+
+```bash
+python CULLALGO1.0.py
+```
+
+
 3. All directories must be changed manually to match desired output. For error handling, all files used for CULLALGO1.0 should be in the same directory.
 ![image](https://github.com/user-attachments/assets/be323027-2965-4be6-a8aa-5de9d1994005)
 ![image](https://github.com/user-attachments/assets/2445f9c4-1cf6-4af9-bda1-12b36c36ac22)
