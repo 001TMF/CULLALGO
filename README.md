@@ -71,7 +71,11 @@ cd CULL
 ```bash
 conda activate CULLALGO
 ```
-3. Change directories in script manually
+4. Download script
+```bash
+https://raw.githubusercontent.com/gusgrazelis/CULLALGO/main/CULLALGO1.0.py
+```
+5. Change directories in script manually
 ```python
 # Lines 288, 289, 290 (CHANGE IF RUNNING NETSOLP FROM CULLALGO1.0.py SCRIPT)
 fasta_path = '/home/s_gus/progs/D.fasta'
@@ -83,12 +87,12 @@ fasta_path = '/home/s_gus/progs/D.fasta'
 output_path = '/home/s_gus/progs/'    
 thermo_path = "/home/s_gus/progs/long_sequence_predictions.tsv"
 ```
-4. Run script
+6. Run script
 ```bash
 python CULLALGO1.0.py
 ```
 
-5. After running the script, the selected_sequences.fasta file is created in the output_path directory.
+7. After running the script, the selected_sequences.fasta file is created in the output_path directory.
 ```bash
 nano selected_sequences.fasta
 ```
