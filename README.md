@@ -70,12 +70,12 @@ conda activate CULLALGO
 ```
 3. Change directories in script manually
 ```python
-# Lines 288, 289, 290
+# Lines 288, 289, 290 (CHANGE IF RUNNING NETSOLP FROM SCRIPT)
 fasta_path = '/home/s_gus/progs/D.fasta'
 output_path = '/home/s_gus/progs/'
 thermo_path = '/home/s_gus/progs/long_sequence_predictions.tsv'
 
-#Lines 309, 310, 311
+#Lines 309, 310, 311 (CHANGE IF -NOT- RUNNING NETSOLP FROM SCRIPT)
 fasta_path = '/home/s_gus/progs/D.fasta'
 output_path = '/home/s_gus/progs/'    
 thermo_path = "/home/s_gus/progs/long_sequence_predictions.tsv"
