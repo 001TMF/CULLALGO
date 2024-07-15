@@ -63,8 +63,11 @@ conda activate temstapro_env_CPU
 ```
 
 # CULLALGO1.0
-1. Have TemStaPro .tsv file output from the TemStaPro model in directory
-2. CULLALGO environment (PYTHON == 3.11)
+1. Have TemStaPro .tsv file output from the TemStaPro model in chosen directory.
+```bash
+cd CULL
+```
+3. CULLALGO environment (PYTHON == 3.11)
 ```bash
 conda activate CULLALGO
 ```
