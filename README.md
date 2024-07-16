@@ -23,7 +23,7 @@ CULLALGO utilizes both NETSOLP and TemStaPro for determining solubility and ther
 
 ## Automatic installation
 ### Important Notes
-#### Still in development
+#### ⚠️ Still in development ⚠️
 - **Permissions**: Running such a script may require administrative privileges, especially for parts that involve installing system-wide packages or modifying system paths.
 - **Compatibility**: This script assumes a Unix-like operating system because of its dependency on bash commands. For Windows, adjustments might be necessary, particularly in how environments are activated and paths are handled.
 ### Run
