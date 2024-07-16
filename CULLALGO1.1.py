@@ -308,6 +308,7 @@ output_path = config['paths']['output']
 thermo_path = config['paths']['thermo']
 run_solubility = config.get('run_solubility', 'Y')  # Default to 'Y' if not specified
 csv_output_name = config.get('output_csv_name', 'default.csv')
+culled_fasta = config.get('culled_fasta')
 
 # Count the total number of sequences in the FASTA file
 total_sequences = count_sequences_in_fasta(fasta_path)
@@ -361,7 +362,7 @@ user_weightings = ask_user_for_weights(config)
 selected_sequences, final_thresholds = adjust_thresholds(df, user_weightings, num_sequences)
 
 # Write selected sequences to a FASTA file
-fasta_output_path = os.path.join(output_path, "selected_sequences.fasta")
+fasta_output_path = os.path.join(output_path, culled_fasta)
 selected_sequences_list = [(seq_id, sequence) for seq_id, sequence in read_fasta(fasta_path) if seq_id in selected_sequences["ID"].values]
 write_fasta(selected_sequences_list, fasta_output_path)
 

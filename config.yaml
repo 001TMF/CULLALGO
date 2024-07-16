@@ -11,6 +11,9 @@ external_solubility_path: /path/to/external/solubility.csv  # Only used if run_s
 #Name for the NetSolP output CSV if you are running solubility
 output_csv_name: default.csv
 
+#name for the fasta now containing oyu culled sequences
+culled_fasta: default.fasta
+
 #How much does each of these weights matter: 1 - Doesn't matter, 2 - Matters somewhat, 3 - Paramount
 weights:
   Molecular_Weight: 3
