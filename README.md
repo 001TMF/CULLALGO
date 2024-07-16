@@ -28,7 +28,7 @@ CULLALGO utilizes both NETSOLP and TemStaPro for determining solubility and ther
 - **Compatibility**: This script assumes a Unix-like operating system because of its dependency on bash commands. For Windows, adjustments might be necessary, particularly in how environments are activated and paths are handled.
 ### Run
 ```bash
-setup.py
+python3 setup.py
 ```
 
 
