@@ -48,6 +48,9 @@ git clone https://github.com/gusgrazelis/CULLALGO.git
 ```bash
 cd cullalgo
 ```
+```bash
+pip install -r cull_requirements.txt
+```
 
 ### NETSOLP Installation
 This should be installed within the cullalgo directory
