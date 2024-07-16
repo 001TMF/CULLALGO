@@ -61,7 +61,7 @@ tar -xzvf netsolp-1.0.ALL.tar.gz
 pip install -r requirements.txt
 ```
 
-### Running CULLALGO
+### Running CULLALGO after TemStaPro has ran
 ```bash
 python3 CULLALGO1.1.py --config config.yaml
 ```
@@ -146,11 +146,26 @@ If CUDA for PyTorch is still not available, check out the [forum.](https://githu
 
 #### CPU setup
 For the systems without GPU, run the following commands for ***CPU*** setup:
-```
+```bash
 conda create -n temstapro_env python=3.7
+```
+```bash
 conda activate temstapro_env
+```
+```bash
 conda install -c conda-forge transformers
+```
+```bash
 conda install pytorch -c pytorch
+```
+```bash
 conda install -c conda-forge sentencepiece
+```
+```bash
 conda install -c conda-forge matplotlib
+```
+#### Run TemStaPro
+```bash
+./temstapro -f ./tests/data/long_sequence.fasta -d ./ProtTrans/ \
+    -e tests/outputs/ --mean-output ./long_sequence_predictions.tsv
 ```
