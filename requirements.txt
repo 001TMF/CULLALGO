@@ -1,10 +1,5 @@
-pandas
-biopython
-Bio.SeqUtils.IsoelectricPoint
-Bio.Seq
-Bio.SeqRecord
+torch>=1.6
+onnxruntime>=1.7.0
 numpy
-os
-subprocess
-collections
-math
+pandas
+fair-esm

@@ -1,0 +1,24 @@
+paths:
+  fasta: /home/tristan/PycharmProjects/CULLALGO/Test-Data/cnn_timed_50percentmodel_cofactor-253-1.73.fasta
+  output: /home/tristan/PycharmProjects/CULLALGO/Test-Data/test-out
+  #Path to your TemStaPro tsv output file
+  thermo: /home/tristan/PycharmProjects/CULLALGO/Test-Data/TemStaPro/TF_Test.tsv
+
+#Will you be running solubility with the NetsolP?
+run_solubility: Y  # Options are 'Y' or 'N'
+external_solubility_path: /path/to/external/solubility.csv  # Only used if run_solubility is 'N'
+
+#Name for the NetSolP output CSV if you are running solubility
+output_csv_name: 4_1_4-FMN_BP2-Test-CULL.csv
+
+#How much does each of these weights matter: 1 - Doesn't matter, 2 - Matters somewhat, 3 - Paramount
+weights:
+  Molecular_Weight: 3
+  ASA: 3
+  Isoelectric_Point: 3
+  Cost: 3
+  Solubility: 3
+  Thermostability: 3
+  Num_Alpha_Helices: 3
+  Entropy: 3
+  DNA_Complexity: 3
