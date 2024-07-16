@@ -14,6 +14,7 @@ def confirm_and_clone(url, directory):
     if response == 'yes':
         run_command(f"git clone {url} {directory}")
 
+
 def main():
     print("Setting up the CULLALGO environment...")
 
@@ -25,13 +26,17 @@ def main():
     run_command("pip install -r cull_requirements.txt")
 
     # Install NETSOLP within the cullalgo directory
-    print("Downloading and setting up NETSOLP...")
-    run_command("mkdir netsolp")
-    os.chdir("netsolp")
-    run_command("wget https://services.healthtech.dtu.dk/services/NetSolP-1.0/netsolp-1.0.ALL.tar.gz")
-    run_command("tar -xzvf netsolp-1.0.ALL.tar.gz")
-    run_command("pip install -r requirements.txt")
-    os.chdir("..")
+    nsp_install = print("would you like to install netsolp? (yes/no): ")
+    if nsp_install == 'yes':
+        print("Downloading and setting up NETSOLP...")
+        run_command("mkdir netsolp")
+        os.chdir("netsolp")
+        run_command("wget https://services.healthtech.dtu.dk/services/NetSolP-1.0/netsolp-1.0.ALL.tar.gz")
+        run_command("tar -xzvf netsolp-1.0.ALL.tar.gz")
+        run_command("pip install -r requirements.txt")
+        os.chdir("..")
+    else:
+        print("Skipping installation of netsolp")
 
     # Setting up TemStaPro
     print("Setting up TemStaPro...")
