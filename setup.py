@@ -26,7 +26,7 @@ def main():
     run_command("pip install -r cull_requirements.txt")
 
     # Install NETSOLP within the cullalgo directory
-    nsp_install = print("would you like to install netsolp? (yes/no): ")
+    nsp_install = input("would you like to install netsolp? (yes/no): ")
     if nsp_install == 'yes':
         print("Downloading and setting up NETSOLP...")
         run_command("mkdir netsolp")
