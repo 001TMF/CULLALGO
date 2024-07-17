@@ -1,61 +1,88 @@
 import subprocess
 import os
 
-def run_command(command):
-    """Utility function to run shell commands."""
+
+def run_command(command, cwd=None, capture_output=False):
+    """Utility function to run shell commands with optional output capture and error handling."""
     try:
-        subprocess.run(command, check=True, shell=True)
+        if capture_output:
+            result = subprocess.run(command, check=True, shell=True, cwd=cwd, stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE, text=True)
+            return True, result.stdout
+        else:
+            subprocess.run(command, check=True, shell=True, cwd=cwd)
+            return True, None
     except subprocess.CalledProcessError as e:
         print(f"An error occurred: {e}")
+        return False, e.output if capture_output else None
 
-def confirm_and_clone(url, directory):
-    """Confirm before cloning a git repository."""
-    response = input(f"Do you want to download and set up from {url}? (yes/no): ").strip().lower()
-    if response == 'yes':
-        run_command(f"git clone {url} {directory}")
+
+def is_conda_environment_present(env_name):
+    """Check if a conda environment is already present by parsing `conda env list`."""
+    success, output = run_command("conda env list", capture_output=True)
+    if success and output:
+        return env_name in output
+    else:
+        print("Could not list conda environments.")
+        return False
+
+
+def clone_repo(url, directory):
+    """Clone a git repository if the directory does not exist."""
+    if not os.path.exists(directory):
+        print(f"Cloning {url} into {directory}...")
+        return run_command(f"git clone {url} {directory}")
+    else:
+        print(f"Directory {directory} already exists. Skipping clone.")
+        return False
+
+
+def setup_conda_environment(env_name, requirements_file):
+    """Setup a conda environment if it's not already present."""
+    if not is_conda_environment_present(env_name):
+        print(f"Creating Conda environment {env_name}...")
+        if run_command(f"conda create -n {env_name} python=3.11 -y"):
+            print(f"Installing requirements from {requirements_file}...")
+            run_command(f"pip install -r {requirements_file}")
+    else:
+        print(f"Conda environment {env_name} already exists. Skipping creation.")
 
 
 def main():
     print("Setting up the CULLALGO environment...")
 
-    # Setting up CULLALGO environment
-    print("Creating Conda environment for CULLALGO...")
-    run_command("conda create -n CULLALGO python=3.11 -y")
-    run_command("conda activate CULLALGO")
-    print("Installing CULLALGO requirements...")
-    run_command("pip install -r cull_requirements.txt")
+    setup_conda_environment("CULLALGO", "cull_requirements.txt")
 
-    # Install NETSOLP within the cullalgo directory
-    nsp_install = input("would you like to install netsolp? (yes/no): ")
-    if nsp_install == 'yes':
-        print("Downloading and setting up NETSOLP...")
-        run_command("mkdir netsolp")
+    if input("Would you like to install NETSOLP? (yes/no): ").strip().lower() == 'yes':
+        if not os.path.exists("netsolp"):
+            os.makedirs("netsolp")
         os.chdir("netsolp")
-        run_command("wget https://services.healthtech.dtu.dk/services/NetSolP-1.0/netsolp-1.0.ALL.tar.gz")
-        run_command("tar -xzvf netsolp-1.0.ALL.tar.gz")
-        run_command("pip install -r requirements.txt")
+        if not os.path.exists("netsolp-1.0.ALL.tar.gz"):
+            run_command("wget https://services.healthtech.dtu.dk/services/NetSolP-1.0/netsolp-1.0.ALL.tar.gz")
+        if run_command("tar -xzvf netsolp-1.0.ALL.tar.gz"):
+            run_command("pip install -r requirements.txt")
         os.chdir("..")
     else:
-        print("Skipping installation of netsolp")
+        print("Skipping installation of NETSOLP.")
 
-    # Setting up TemStaPro
-    print("Setting up TemStaPro...")
-    temsta_directory = "./temstapro"  # Specify TemStaPro directory
-    confirm_and_clone("https://github.com/ievapudz/TemStaPro.git", temsta_directory)
-    os.chdir(temsta_directory)
-
-    # Ask user for setup choice (GPU or CPU)
-    setup_type = input("Do you want to set up for GPU or CPU? Enter 'GPU' or 'CPU': ").strip().upper()
-    if setup_type == "GPU":
-        run_command("conda deactivate")
-        run_command("conda env create -f environment_GPU.yml")
-        run_command("conda activate temstapro_env_GPU")
+    if input("Would you like to install TemStaPro? (yes/no): ").strip().lower() == 'yes':
+        temsta_directory = "./temstapro"
+        if clone_repo("https://github.com/ievapudz/TemStaPro.git", temsta_directory):
+            os.chdir(temsta_directory)
+            setup_type = input("Do you want to set up for GPU or CPU? Enter 'GPU' or 'CPU': ").strip().upper()
+            env_file = "environment_GPU.yml" if setup_type == "GPU" else "environment_CPU.yml"
+            env_name = "temstapro_env_GPU" if setup_type == "GPU" else "temstapro_env_CPU"
+            if not is_conda_environment_present(env_name):
+                run_command(f"conda env create -f {env_file}")
+            else:
+                print(f"Environment {env_name} already exists. Skipping setup.")
+        else:
+            print("Error or user cancelled cloning TemStaPro. Cannot proceed with its setup.")
     else:
-        run_command("conda deactivate")
-        run_command("conda env create -f environment_CPU.yml")
-        run_command("conda activate temstapro_env_CPU")
+        print("Skipping installation of TemStaPro.")
 
     print("Setup completed. Please activate the conda environments as needed to use the tools.")
+
 
 if __name__ == "__main__":
     main()
