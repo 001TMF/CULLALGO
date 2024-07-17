@@ -1,31 +1,59 @@
-# CULLALGO1.0
-'CULLALGO is a script that uses multiple parameters to 'cull' a large dataset of .fasta protein sequences to a manageable amount with desired traits in a .fasta output. All measurements are based on up to date existing literature.'
+# CULLALGO 1.1
 
-The determinant parameters in CULLALGO1.0 are as follows:
-1. Molecular weight
-2. Average Surface Accesibility
+## Description
+CULLALGO is a script designed to "cull" large datasets of .fasta protein sequences into a manageable amount with desired traits, outputting results in a .fasta file. All measurements leverage up-to-date literature.
+
+### Determinant Parameters
+The script uses the following parameters:
+1. Molecular Weight
+2. Average Surface Accessibility
 3. Isoelectric Point
 4. Cost
-5. Sollubility
+5. Solubility
 6. Thermostability
-7. Alpha helical propensity
-8. Shannon's entropy (Redundancy measure)
-9. DNA complexity
+7. Alpha Helical Propensity
+8. Shannon's Entropy (Redundancy Measure)
+9. DNA Complexity
 
-'CULLALGO uses NETSOLP and TemStaPro for determining Sollubility and Thermostability thresholds, respectively. Both are required to install and set up in order to run the script.'
+CULLALGO utilizes both NETSOLP and TemStaPro for determining solubility and thermostability thresholds, respectively. Both tools must be installed and configured to run the script.
 
-'NETSOLP https://github.com/tvinet/NetSolP-1.0'
+### Dependencies
+- NETSOLP: [GitHub - NetSolP](https://github.com/tvinet/NetSolP-1.0)
+- TemStaPro: [GitHub - TemStaPro](https://github.com/ievapudz/TemStaPro)
 
-'TemStaPro https://github.com/ievapudz/TemStaPro'
-
-# Set-up
-# NetSolP Installation (https://github.com/tvinet/NetSolP-1.0)
+## Automatic installation
+### Important Notes
+#### ⚠️ Still in development ⚠️
+- **Permissions**: Running such a script may require administrative privileges, especially for parts that involve installing system-wide packages or modifying system paths.
+- **Compatibility**: This script assumes a Unix-like operating system because of its dependency on bash commands. For Windows, adjustments might be necessary, particularly in how environments are activated and paths are handled.
+### Run
 ```bash
-conda create -n CULLALGO
+python3 setup.py
+```
+
+
+## Manaual Installation
+### Environment Setup
+```bash
+conda create -n CULLALGO python=3.11
 ```
 ```bash
-mkdir CULL
+conda activate CULLALGO
 ```
+
+### CULLALGO Script preperation
+```bash
+git clone https://github.com/gusgrazelis/CULLALGO.git
+```
+```bash
+cd cullalgo
+```
+```bash
+pip install -r cull_requirements.txt
+```
+
+### NETSOLP Installation
+This should be installed within the cullalgo directory
 ```bash
 wget https://services.healthtech.dtu.dk/services/NetSolP-1.0/netsolp-1.0.ALL.tar.gz
 ```
@@ -35,67 +63,112 @@ tar -xzvf netsolp-1.0.ALL.tar.gz
 ```bash
 pip install -r requirements.txt
 ```
+
+### Running CULLALGO after TemStaPro has ran
 ```bash
-#Example code. Practical implementation shown in CULLALGO1.0.py
-python predict.py --FASTA_PATH ./test_fasta.fasta --OUTPUT_PATH ./test_preds.csv --MODEL_TYPE ESM12 --PREDICTION_TYPE S
+python3 CULLALGO1.1.py --config config.yaml
 ```
-# TemStaPro Installation (https://github.com/ievapudz/TemStaPro)
+
+### TemStaPro Installation
+This should be its own directory and can be where you like.
 ```bash
 git clone https://github.com/ievapudz/TemStaPro.git
 ```
-
 ```bash
 cd TemStaPro
 ```
+#### Environment requirements
 
-```bash
+Before starting up Anaconda or Miniconda should be installed
+in the system. Follow instructions given in 
+[Conda's documentation.](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html)
+
+Setting up the environment can be done in one of the following ways.
+
+#### From YML file
+
+In this repository two YML files can be found: one YML file
+has the prerequisites for the environment that exploits only 
+CPU ([`environment_CPU.yml`](./environment_CPU.yml)), another one to exploit both CPU 
+GPU ([`environment_GPU.yml`](./environment_GPU.yml)).
+
+This approach was tested with Conda 4.10.3 and 4.12.0 versions.
+
+Run the following command to create the environment from a 
+YML file:
+```
 conda env create -f environment_CPU.yml
 ```
 
-```bash
+Activate the environment:
+```
 conda activate temstapro_env_CPU
 ```
 
+#### From scratch
+#### GPU Setup
+To set up the environment to exploit **GPU** for the program, run the following commands:
 ```bash
-#Example usage
-./temstapro -f ./tests/data/long_sequence.fasta -d ./ProtTrans/ \
-    -e /home/user/CULL --mean-output ./long_sequence_predictions.tsv
+conda create -n temstapro_env python=3.7
+```
+```bash
+conda activate temstapro_env
+```
+```bash
+conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+```
+```bash
+conda install -c conda-forge transformers
+```
+```bash
+conda install -c conda-forge sentencepiece
+```
+```bash
+conda install -c conda-forge matplotlib
 ```
 
-# CULLALGO1.0
-1. Have TemStaPro .tsv file output from the TemStaPro model in chosen directory. 
+To test if PyTorch package is installed to exploit CUDA,
+call `python3` command interpreter and run the 
+following lines:
 ```bash
-cd CULL
+python3
 ```
-2. CULLALGO environment (PYTHON == 3.11)
-```bash
-conda activate CULLALGO
-```
-3. Download script
-```bash
-wget https://raw.githubusercontent.com/gusgrazelis/CULLALGO/main/CULLALGO1.0.py
-```
-4. Change directories in script manually
 ```python
-# Lines 288, 289, 290 (CHANGE IF RUNNING NETSOLP FROM CULLALGO1.0.py SCRIPT)
-fasta_path = '/home/s_gus/progs/D.fasta' #.Fasta file
-output_path = '/home/s_gus/progs/' #Output path for both SOLLUBILITY and selected_sequences.fasta files
-thermo_path = '/home/s_gus/progs/long_sequence_predictions.tsv' #TemStaPro .tsv file
-
-#Lines 309, 310, 311 (CHANGE IF -NOT- RUNNING NETSOLP FROM CULLALGO1.0.py SCRIPT)
-fasta_path = '/home/s_gus/progs/D.fasta'
-output_path = '/home/s_gus/progs/'    
-thermo_path = "/home/s_gus/progs/long_sequence_predictions.tsv"
+import torch
+torch.cuda.is_available()
 ```
-5. Run script
+
+If the output is 'True', then the installing procedure was successful,
+otherwise try to set the path to the installed packages:
+```
+export PATH=/usr/local/cuda-11.7/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64\${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+```
+
+If CUDA for PyTorch is still not available, check out the [forum.](https://github.com/pytorch/pytorch/issues/30664)
+
+#### CPU setup
+For the systems without GPU, run the following commands for ***CPU*** setup:
 ```bash
-python CULLALGO1.0.py
+conda create -n temstapro_env python=3.7
 ```
-
-6. After running the script, the selected_sequences.fasta file is created in the output_path directory.
 ```bash
-nano selected_sequences.fasta
+conda activate temstapro_env
 ```
-
-# Tweaks for desired results
-There are multiple lines in the code that can be tweaked for individual variance. As of CULLALGO1.0, all of them are made clear via comments in the code.
+```bash
+conda install -c conda-forge transformers
+```
+```bash
+conda install pytorch -c pytorch
+```
+```bash
+conda install -c conda-forge sentencepiece
+```
+```bash
+conda install -c conda-forge matplotlib
+```
+#### Run TemStaPro
+```bash
+./temstapro -f ./tests/data/long_sequence.fasta -d ./ProtTrans/ \
+    -e tests/outputs/ --mean-output ./long_sequence_predictions.tsv
+```

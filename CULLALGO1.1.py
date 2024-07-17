@@ -8,6 +8,8 @@ import os
 import subprocess
 from collections import Counter
 import math
+import yaml
+import argparse
 
 # Define weights, ASAs, costs, Alpha-helical propensities, Codon dict.
 weights = {'A': 71.04, 'C': 103.01, 'D': 115.03, 'E': 129.04, 'F': 147.07,
@@ -114,6 +116,25 @@ def detect_alpha_helices(sequence, window_size=10, threshold=1.0):
 
     return alpha_helices
 
+def count_sequences_in_fasta(fasta_path):
+    """Counts the number of sequences in a given FASTA file."""
+    count = 0
+    with open(fasta_path, 'r') as fasta_file:
+        for record in SeqIO.parse(fasta_file, 'fasta'):
+            count += 1
+    return count
+
+# Function to parse command-line arguments
+def parse_args():
+    parser = argparse.ArgumentParser(description='Process command line arguments.')
+    parser.add_argument('--config', type=str, default='config.yaml', help='Path to the configuration file')
+    return parser.parse_args()
+
+# Function to read configuration from YAML file
+def load_config(file_path):
+    with open(file_path, 'r') as file:
+        return yaml.safe_load(file)
+
 def read_fasta(file_path):
     sequences = []
     for record in SeqIO.parse(file_path, "fasta"):
@@ -126,8 +147,7 @@ def read_solubility(file_path):
     df['Solubility'] = pd.to_numeric(df['Solubility'], errors='coerce')
     return df[['ID', 'Solubility']]
 
-def read_thermostability(output_path, thermo_path):
-    thermo_path = os.path.join(output_path, "long_sequence_predictions.tsv")
+def read_thermostability(thermo_path):
     df = pd.read_csv(thermo_path, sep='\t')
     df.columns = [f'Col{i+1}' for i in range(len(df.columns))]
     thermostability_column = df.columns[16] 
@@ -160,7 +180,7 @@ def calculate_entropy(sequence):
 def calculate_properties(fasta_path, solubility_path, thermo_path):
     sequences = read_fasta(fasta_path)
     solubility_data = read_solubility(solubility_path)
-    thermostability_data = read_thermostability(output_path, thermo_path)
+    thermostability_data = read_thermostability(thermo_path)
 
     data = []
     for seq_id, sequence in sequences:
@@ -205,25 +225,18 @@ def determine_thresholds_percentile(df, metric, percentile=100, reverse=False):
 # 2 - 50th percentile. 50% of the worst sequences culled.
 # 3 - 80th percentile. 80% of the worst sequences culled.
 # weightings[parameter] can be changed according to needs-------------------------------------------------------------------------
-def ask_user_for_weights():
+def ask_user_for_weights(config):
     parameters = ["Molecular_Weight", "ASA", "Isoelectric_Point", "Cost", "Solubility", "Thermostability", "Num_Alpha_Helices", "Entropy", "DNA_Complexity"]
     weightings = {}
     for parameter in parameters:
-        while True:
-            try:
-                weight = int(input(f"How much does {parameter} matter: 1 - Doesn't matter, 2 - Matters somewhat, 3 - Paramount: "))
-                if weight in [1, 2, 3]:
-                    if weight == 1:
-                        weightings[parameter] = 0
-                    elif weight == 2:
-                        weightings[parameter] = 50
-                    else:
-                        weightings[parameter] = 80
-                    break
-                else:
-                    print("Please enter 1, 2, or 3.")
-            except ValueError:
-                print("Invalid input. Please enter a number (1, 2, or 3).")
+        # Read the weighting from the config file
+        weight = config['weights'].get(parameter, 2)  # default to 2 if not specified
+        if weight == 1:
+            weightings[parameter] = 0
+        elif weight == 2:
+            weightings[parameter] = 50
+        else:
+            weightings[parameter] = 80
     return weightings
     
 def write_fasta(sequences, output_path):
@@ -283,27 +296,50 @@ def adjust_thresholds(df, user_weightings, num_sequences):
             if adjusted_thresholds[key] - increment > 0:
                 adjusted_thresholds[key] -= increment
 
-# User input prompt for number of sequences to select
-num_sequences = int(input("How many sequences do you need? "))
+# Parse command-line arguments
+args = parse_args()
 
-# Prompt for solubility measurements
-print("Run solubility measurements? (predict.py must be in present directory)")
-print("Example command line execution: python predict.py --FASTA_PATH /home/s_gus/progs/D.fasta --OUTPUT_PATH /home/s_gus/progs/test_preds.csv --MODEL_TYPE ESM12 --PREDICTION_TYPE S")
-run_solubility = input("Run solubility measurements? (Y/N): ").strip().upper()
+# Load configuration
+config = load_config(args.config)
+
+#Config
+fasta_path = config['paths']['fasta']
+output_path = config['paths']['output']
+thermo_path = config['paths']['thermo']
+run_solubility = config.get('run_solubility', 'Y')  # Default to 'Y' if not specified
+csv_output_name = config.get('output_csv_name', 'default.csv')
+culled_fasta = config.get('culled_fasta')
+
+# Count the total number of sequences in the FASTA file
+total_sequences = count_sequences_in_fasta(fasta_path)
+
+# User input prompt for number of sequences to select
+while True:
+    try:
+        num_sequences = int(input(f"How many sequences do you need? (Maximum {total_sequences}): "))
+        if 1 <= num_sequences <= total_sequences:
+            break
+        else:
+            print(f"Please enter a number between 1 and {total_sequences}.")
+    except ValueError:
+        print("Invalid input. Please enter a valid number.")
+
+print(f"You have selected to process {num_sequences} sequences.")
+
+# Solubility calculation from NETSOLP output
+solubility_path = os.path.join(config['paths']['output'], config.get('output_csv_name', 'default.csv'))
+
+# Check if the file exists at the specified path and create it if it does not
+if not os.path.exists(solubility_path):
+    open(solubility_path, 'w').close()  # Create an empty file
 
 if run_solubility == 'Y':
-# If a prompt is wanted:
-#    fasta_path = input("Enter the path for the FASTA file (e.g., /home/s_gus/progs/D.fasta): ").strip()
-#    output_path = input("Enter the path for the output CSV file (e.g., /home/s_gus/progs/): ").strip()
-    fasta_path = '/home/s_gus/progs/D.fasta'
-    output_path = '/home/s_gus/progs/'
-    thermo_path = '/home/s_gus/progs/long_sequence_predictions.tsv'
     if os.path.isfile('predict.py'):
         try:
             command = [
                 'python', 'predict.py', 
                 '--FASTA_PATH', fasta_path, 
-                '--OUTPUT_PATH', output_path, 
+                '--OUTPUT_PATH', solubility_path,
                 '--MODEL_TYPE', 'ESM12', 
                 '--PREDICTION_TYPE', 'S'
             ]
@@ -313,25 +349,20 @@ if run_solubility == 'Y':
     else:
         print("predict.py not found in the present directory.")
 else:
-    print("Skipping solubility measurements.")
-#    fasta_path = input("Enter the path for the FASTA file (e.g., /home/s_gus/progs/D.fasta): ").strip()
-#    output_path = input("Enter the path for the output CSV file (e.g., /home/s_gus/progs/): ").strip()
-    fasta_path = '/home/s_gus/progs/D.fasta'
-    output_path = '/home/s_gus/progs/'    
-    thermo_path = "/home/s_gus/progs/long_sequence_predictions.tsv"
+    if 'external_solubility_path' in config:
+        solubility_path = config['external_solubility_path']
+        print("Using external solubility data from:", solubility_path)
+    else:
+        raise ValueError("External solubility path must be provided in the config when solubility calculations are skipped.")
 
-# Solubility calculation from NETSOLP output
-solubility_path = os.path.join(output_path, "test_preds.csv")
 df = calculate_properties(fasta_path, solubility_path, thermo_path)
-#last_thermostability_threshold = df['Thermostability']
-#print(f"Last thermostability threshold: {last_thermostability_threshold}")
-user_weightings = ask_user_for_weights()
+user_weightings = ask_user_for_weights(config)
 
 # Adjust thresholds to meet the required number of sequences
 selected_sequences, final_thresholds = adjust_thresholds(df, user_weightings, num_sequences)
 
 # Write selected sequences to a FASTA file
-fasta_output_path = os.path.join(output_path, "selected_sequences.fasta")
+fasta_output_path = os.path.join(output_path, culled_fasta)
 selected_sequences_list = [(seq_id, sequence) for seq_id, sequence in read_fasta(fasta_path) if seq_id in selected_sequences["ID"].values]
 write_fasta(selected_sequences_list, fasta_output_path)
 
