@@ -32,7 +32,7 @@ python3 setup.py
 ```
 
 
-## Manaual Installation
+## Manual Installation
 ### Environment Setup
 ```bash
 conda create -n CULLALGO python=3.11
