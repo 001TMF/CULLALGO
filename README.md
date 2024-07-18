@@ -66,7 +66,7 @@ pip install -r requirements.txt
 
 ### Running CULLALGO after TemStaPro has ran
 ```bash
-python3 CULLALGO1.1.py --config config.yaml
+python3 CULLALGO.py --config config.yaml
 ```
 
 ### TemStaPro Installation

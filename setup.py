@@ -1,7 +1,6 @@
 import subprocess
 import os
 
-
 def run_command(command, cwd=None, capture_output=False):
     """Utility function to run shell commands with optional output capture and error handling."""
     try:
@@ -54,14 +53,13 @@ def main():
     setup_conda_environment("CULLALGO", "cull_requirements.txt")
 
     if input("Would you like to install NETSOLP? (yes/no): ").strip().lower() == 'yes':
-        if not os.path.exists("netsolp"):
-            os.makedirs("netsolp")
-        os.chdir("netsolp")
         if not os.path.exists("netsolp-1.0.ALL.tar.gz"):
             run_command("wget https://services.healthtech.dtu.dk/services/NetSolP-1.0/netsolp-1.0.ALL.tar.gz")
         if run_command("tar -xzvf netsolp-1.0.ALL.tar.gz"):
-            run_command("pip install -r requirements.txt")
-        os.chdir("..")
+            if os.path.exists("requirements.txt"):
+                run_command("pip install -r requirements.txt")
+            else:
+                print("No requirements file found. Manual installation will be required")
     else:
         print("Skipping installation of NETSOLP.")
 
