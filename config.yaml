@@ -1,3 +1,9 @@
+#TemStaPro
+TSP_paths:
+  fasta_directory:
+  output_directory:
+
+#CULLALGO
 paths:
   fasta: /home/user/your.fasta
   output: /home/user/out-put/directory
@@ -8,11 +14,6 @@ paths:
 run_solubility: Y  # Options are 'Y' or 'N'
 external_solubility_path: /path/to/external/solubility.csv  # Only used if run_solubility is 'N'
 
-#Name for the NetSolP output CSV if you are running solubility
-output_csv_name: default.csv
-
-#name for the fasta now containing oyu culled sequences
-culled_fasta: default.fasta
 
 #The number of sequences you want the program to output after culling.
 num_sequences: 500

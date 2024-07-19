@@ -10,6 +10,8 @@ from collections import Counter
 import math
 import yaml
 import argparse
+from tqdm import tqdm
+import time
 
 # Define weights, ASAs, costs, Alpha-helical propensities, Codon dict.
 weights = {'A': 71.04, 'C': 103.01, 'D': 115.03, 'E': 129.04, 'F': 147.07,
@@ -63,7 +65,6 @@ codon_dict = {
 def calculate_dna_complexity(sequence):
     total_codons = sum(len(codon_dict[aa]) for aa in sequence if aa in codon_dict)
     return total_codons
-
 
 # Molecular weight
 def molweight(sequence):
@@ -332,26 +333,33 @@ def main():
     output_path = config['paths']['output']
     thermo_directory = config['paths']['thermo']
     run_solubility = config.get('run_solubility', 'Y')
-    csv_output_name = config.get('output_csv_name', 'default.csv')
-    culled_fasta = config.get('culled_fasta')
+    # csv_output_name = config.get('output_csv_name', 'default.csv')
+    culled_fasta = 'culled_fasta'
 
     matched_files = match_files(fasta_directory, thermo_directory)
+    total_files = len(matched_files)
 
+    pbar = tqdm(total=total_files, desc='Processing FASTA Files', unit='file')
     for fasta_file, thermo_file in matched_files:
+        start_time = time.time()
         fasta_data = read_fasta(fasta_file)
         total_sequences = len(fasta_data)
         num_sequences = config.get("num_sequences", total_sequences)
 
-        print(f"You are running {num_sequences} out of a maximum {total_sequences}")
+        print(f"You are culling down to {num_sequences} sequence(s) out of a maximum {total_sequences}")
         if not 1 <= num_sequences <= total_sequences:
             raise ValueError(f"Number of sequences must be between 1 and {total_sequences}")
 
+        print(f"{fasta_file} culling has begun")
+
+        base_name = os.path.splitext(os.path.basename(fasta_file))[0]
+        csv_output_name = f"{base_name}_solubility.csv"
         solubility_path = os.path.join(output_path, csv_output_name)
         if not os.path.exists(solubility_path):
             open(solubility_path, 'w').close()
 
         if run_solubility == 'Y':
-            if os.path.isfile('predict.py'):
+            if os.path.isfile('../netsolp/predict.py'):
                 command = [
                     'python', 'predict.py',
                     '--FASTA_PATH', fasta_file,
@@ -375,10 +383,14 @@ def main():
         selected_sequences, final_thresholds = adjust_thresholds(df, user_weightings, num_sequences)
 
         fasta_output_path = os.path.join(output_path, culled_fasta, "-Culled")
-        selected_sequences_list = [(seq_id, sequence) for seq_id, sequence in fasta_data.items() if seq_id in selected_sequences["ID"].values]
+        selected_sequences_list = [(seq_id, sequence) for seq_id, sequence in fasta_data if seq_id in selected_sequences["ID"].values]
         write_fasta(selected_sequences_list, fasta_output_path)
 
         print(f"Selected {len(selected_sequences)} sequences written to {fasta_output_path}.")
+        #update the progress bar
+        pbar.update(1)
+    pbar.close()
+
 
 if __name__ == "__main__":
     main()

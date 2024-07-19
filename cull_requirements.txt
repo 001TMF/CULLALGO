@@ -2,3 +2,4 @@ pandas
 biopython
 numpy
 PyYAML
+tqdm

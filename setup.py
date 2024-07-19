@@ -55,17 +55,24 @@ def main():
     setup_conda_environment("CULLALGO", "cull_requirements.txt")
 
     if input("Would you like to install NETSOLP? (yes/no): ").strip().lower() == 'yes':
+        run_command("conda activate CULLALGO")
+        if not os.path.exists("netsolp"):
+            os.makedirs("netsolp")
+        os.chdir("netsolp")
         if not os.path.exists("netsolp-1.0.ALL.tar.gz"):
             run_command("wget https://services.healthtech.dtu.dk/services/NetSolP-1.0/netsolp-1.0.ALL.tar.gz")
         if run_command("tar -xzvf netsolp-1.0.ALL.tar.gz"):
+            os.chdir("netsolp")
             if os.path.exists("requirements.txt"):
                 run_command("pip install -r requirements.txt")
+                os.chdir("..")
             else:
                 print("No requirements file found. Manual installation will be required")
     else:
         print("Skipping installation of NETSOLP.")
 
     if input("Would you like to install TemStaPro? (yes/no): ").strip().lower() == 'yes':
+        run_command("conda deactivate")
         temsta_directory = "./temstapro"
         if clone_repo("https://github.com/ievapudz/TemStaPro.git", temsta_directory):
             setup_type = input("Do you want to set up for GPU or CPU? Enter 'GPU' or 'CPU': ").strip().upper()
