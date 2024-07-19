@@ -14,6 +14,9 @@ output_csv_name: default.csv
 #name for the fasta now containing oyu culled sequences
 culled_fasta: default.fasta
 
+#The number of sequences you want the program to output after culling.
+num_sequences: 500
+
 #How much does each of these weights matter: 1 - Doesn't matter, 2 - Matters somewhat, 3 - Paramount
 weights:
   Molecular_Weight: 3

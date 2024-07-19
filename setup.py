@@ -1,7 +1,6 @@
 import subprocess
 import os
 
-
 def run_command(command, cwd=None, capture_output=False):
     """Utility function to run shell commands with optional output capture and error handling."""
     try:
@@ -43,7 +42,9 @@ def setup_conda_environment(env_name, requirements_file):
         print(f"Creating Conda environment {env_name}...")
         if run_command(f"conda create -n {env_name} python=3.11 -y"):
             print(f"Installing requirements from {requirements_file}...")
+            run_command(f"conda activate {env_name}")
             run_command(f"pip install -r {requirements_file}")
+            run_command("conda deactivate")
     else:
         print(f"Conda environment {env_name} already exists. Skipping creation.")
 
@@ -54,22 +55,21 @@ def main():
     setup_conda_environment("CULLALGO", "cull_requirements.txt")
 
     if input("Would you like to install NETSOLP? (yes/no): ").strip().lower() == 'yes':
-        if not os.path.exists("netsolp"):
-            os.makedirs("netsolp")
-        os.chdir("netsolp")
         if not os.path.exists("netsolp-1.0.ALL.tar.gz"):
             run_command("wget https://services.healthtech.dtu.dk/services/NetSolP-1.0/netsolp-1.0.ALL.tar.gz")
         if run_command("tar -xzvf netsolp-1.0.ALL.tar.gz"):
-            run_command("pip install -r requirements.txt")
-        os.chdir("..")
+            if os.path.exists("requirements.txt"):
+                run_command("pip install -r requirements.txt")
+            else:
+                print("No requirements file found. Manual installation will be required")
     else:
         print("Skipping installation of NETSOLP.")
 
     if input("Would you like to install TemStaPro? (yes/no): ").strip().lower() == 'yes':
         temsta_directory = "./temstapro"
         if clone_repo("https://github.com/ievapudz/TemStaPro.git", temsta_directory):
-            os.chdir(temsta_directory)
             setup_type = input("Do you want to set up for GPU or CPU? Enter 'GPU' or 'CPU': ").strip().upper()
+            os.chdir("temstapro")
             env_file = "environment_GPU.yml" if setup_type == "GPU" else "environment_CPU.yml"
             env_name = "temstapro_env_GPU" if setup_type == "GPU" else "temstapro_env_CPU"
             if not is_conda_environment_present(env_name):
