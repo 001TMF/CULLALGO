@@ -236,7 +236,7 @@ def ask_user_for_weights(config):
         elif weight == 2:
             weightings[parameter] = 50
         else:
-            weightings[parameter] = 80
+            weightings[parameter] = 100
     return weightings
     
 def write_fasta(sequences, output_path):
