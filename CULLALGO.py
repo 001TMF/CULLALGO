@@ -93,6 +93,7 @@ def calculate_propensity(sequence, window_size=10, threshold=1.0):
         propensities.append(avg_propensity)
     return propensities
 
+
 # Iterates propensities to determine helical regions
 # Window size and threshold should match from calculate_propensity-------------------------------------------------
 def detect_alpha_helices(sequence, window_size=10, threshold=1.0):
@@ -155,7 +156,6 @@ def read_thermostability(thermo_path):
     return df[['Col1', 'Thermostability']].rename(columns={'Col1': 'ID'})
     
 def extract_last_number(value):
-    import numpy as np
     if isinstance(value, float) and np.isnan(value):
         return None  
     elif isinstance(value, (float, int)):
