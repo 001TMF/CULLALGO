@@ -75,8 +75,8 @@ def main():
     config = load_config(args.config)
     prottrans_directory = "./ProtTrans/",
     cache_directory = "./tests/cache/",
-    fasta_directory = config["TSP_paths"]["fasta_directory"]
-    output_directory = config["TSP_paths"]["output_directory"]
+    fasta_directory = config["paths"]["fasta"]
+    output_directory = config["paths"]["thermo"]
     run_temstapro(fasta_directory, prottrans_directory, cache_directory, output_directory)
 
 if __name__ == "__main__":

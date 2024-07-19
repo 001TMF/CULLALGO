@@ -1,14 +1,8 @@
-#TemStaPro
-TSP_paths:
-  fasta_directory:
-  output_directory:
-
 #CULLALGO
 paths:
   fasta: /home/user/your.fasta
   output: /home/user/out-put/directory
-  #Path to your TemStaPro tsv output file
-  thermo: /home/user/TemStaPro/output.tsv
+  thermo: /home/s_tristan/externals/CULLALGO/v2_test/TSP
 
 #Will you be running solubility with the NetsolP?
 run_solubility: Y  # Options are 'Y' or 'N'
