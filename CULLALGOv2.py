@@ -257,7 +257,7 @@ def ask_user_for_weights(config):
         elif weight == 2:
             weightings[parameter] = 50
         else:
-            weightings[parameter] = 80
+            weightings[parameter] = 100
     return weightings
 
 
@@ -333,7 +333,6 @@ def main():
     output_path = config['paths']['output']
     thermo_directory = config['paths']['thermo']
     run_solubility = config.get('run_solubility', 'Y')
-    # csv_output_name = config.get('output_csv_name', 'default.csv')
     culled_fasta = 'culled_fasta'
 
     matched_files = match_files(fasta_directory, thermo_directory)
