@@ -286,11 +286,13 @@ def select_sequences(df, thresholds, num_sequences):
 
 
 # Main logic to adjust thresholds to meet the required number of sequences
-def adjust_thresholds(df, user_weightings, num_sequences):
+def adjust_thresholds(df, user_weightings, num_sequences, max_iterations=1000):
     adjusted_thresholds = user_weightings.copy()
-    increment = 1  # Adjust this value to control how aggressively the thresholds are lowered (Default = 1)------------------------------------
+    increment = 1  # Adjust this value to control how aggressively the thresholds are lowered (Default = 1)
 
-    while True:
+    iteration = 0
+
+    while iteration < max_iterations:
         thresholds = {
             "Molecular_Weight": determine_thresholds_percentile(df, "Molecular_Weight", percentile=adjusted_thresholds["Molecular_Weight"]),
             "ASA": determine_thresholds_percentile(df, "ASA", percentile=adjusted_thresholds["ASA"]),
@@ -299,7 +301,7 @@ def adjust_thresholds(df, user_weightings, num_sequences):
             "Solubility": determine_thresholds_percentile(df, "Solubility", percentile=100 - adjusted_thresholds["Solubility"], reverse=True),
             "Thermostability": determine_thresholds_percentile(df, "Thermostability", percentile=100 - adjusted_thresholds["Thermostability"], reverse=True),
             "Num_Alpha_Helices": determine_thresholds_percentile(df, "Num_Alpha_Helices", percentile=100 - adjusted_thresholds["Num_Alpha_Helices"], reverse=True),
-            "Entropy": determine_thresholds_percentile(df, "Entropy", percentile=100 - adjusted_thresholds["Entropy"], reverse=True),
+            "Entropy": determine_thresholds_percentile(df, "Entropy", percentile=adjusted_thresholds["Entropy"]),  # Adjusted to filter for lowest entropy
             "DNA_Complexity": determine_thresholds_percentile(df, "DNA_Complexity", percentile=100 - adjusted_thresholds["DNA_Complexity"], reverse=True)
         }
 
@@ -309,9 +311,10 @@ def adjust_thresholds(df, user_weightings, num_sequences):
             # Trim the excess sequences
             sorted_sequences = selected_sequences.sort_values(
                 by=["Molecular_Weight", "ASA", "Isoelectric_Point", "Cost", "Solubility", "Thermostability", "Num_Alpha_Helices", "Entropy", "DNA_Complexity"],
-                ascending=[True, True, True, True, False, False, False, False, False]
+                ascending=[True, True, True, True, False, False, False, True, False]
                 # Sorting in ascending order for the first four parameters to get the lowest values at the top.
-                # Sorting in ascending order for the last five parameters to get the highest values at the top.
+                # Sorting in ascending order for Entropy to get the lowest values at the top.
+                # Sorting in ascending order for the last parameters to get the highest values at the top.
             )
             trimmed_sequences = sorted_sequences.head(num_sequences)
             return trimmed_sequences, thresholds
@@ -319,6 +322,11 @@ def adjust_thresholds(df, user_weightings, num_sequences):
         for key in adjusted_thresholds.keys():
             if adjusted_thresholds[key] - increment > 0:
                 adjusted_thresholds[key] -= increment
+
+        iteration += 1
+
+    raise ValueError("Unable to find the required number of sequences within the given constraints.")
+
 
 def match_files(fasta_path, thermo_path):
     fasta_files = {os.path.splitext(f)[0]: f for f in os.listdir(fasta_path) if f.endswith('.fasta')}

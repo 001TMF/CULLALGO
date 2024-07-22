@@ -2,7 +2,7 @@
 paths:
   fasta: /home/user/your.fasta
   output: /home/user/out-put/directory
-  thermo: /home/s_tristan/externals/CULLALGO/v2_test/TSP
+  thermo: /home/user/TemStaPro/
 
 #Will you be running solubility with the NetsolP?
 run_solubility: Y  # Options are 'Y' or 'N'
@@ -14,12 +14,12 @@ num_sequences: 500
 
 #How much does each of these weights matter: 1 - Doesn't matter, 2 - Matters somewhat, 3 - Paramount
 weights:
-  Molecular_Weight: 3
-  ASA: 3
-  Isoelectric_Point: 3
-  Cost: 3
+  Molecular_Weight: 1
+  ASA: 2
+  Isoelectric_Point: 2
+  Cost: 2
   Solubility: 3
   Thermostability: 3
-  Num_Alpha_Helices: 3
-  Entropy: 3
-  DNA_Complexity: 3
+  Num_Alpha_Helices: 1
+  Entropy: 1
+  DNA_Complexity: 2
