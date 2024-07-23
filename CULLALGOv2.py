@@ -366,7 +366,7 @@ def main():
             open(solubility_path, 'w').close()
 
         if run_solubility == 'Y':
-            if os.path.isfile('../netsolp/predict.py'):
+            if os.path.isfile('netsolp/predict.py'):
                 command = [
                     'python', 'predict.py',
                     '--FASTA_PATH', fasta_file,
@@ -383,13 +383,13 @@ def main():
                 print("Using external solubility data from:", solubility_path)
             else:
                 raise ValueError("External solubility path must be provided in the config when solubility calculations are skipped.")
-
+        print(solubility_path)
         df = calculate_properties(fasta_file, solubility_path, thermo_file)
         user_weightings = ask_user_for_weights(config)
 
         selected_sequences, final_thresholds = adjust_thresholds(df, user_weightings, num_sequences)
 
-        fasta_output_path = os.path.join(output_path, culled_fasta, "-Culled")
+        fasta_output_path = os.path.join(output_path, culled_fasta, f"{base_name}-Culled.fasta")
         selected_sequences_list = [(seq_id, sequence) for seq_id, sequence in fasta_data if seq_id in selected_sequences["ID"].values]
         write_fasta(selected_sequences_list, fasta_output_path)
 
