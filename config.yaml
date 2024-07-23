@@ -12,6 +12,9 @@ external_solubility_path: /path/to/external/solubility.csv  # Only used if run_s
 #The number of sequences you want the program to output after culling.
 num_sequences: 500
 
+#would you like to use a refrence sequence?
+refrence_seq: Y # Options are Y or N
+
 #How much does each of these weights matter: 1 - Doesn't matter, 2 - Matters somewhat, 3 - Paramount
 weights:
   Molecular_Weight: 1
